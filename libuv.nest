@@ -1,0 +1,110 @@
+;-    .-.                                                                       
+;-   /'v'\   SISKIN-Builder project file                                        
+;-  (/uOu\)  https://github.com/Siskin-framework/Builder/                       
+;-===="="=======================================================================
+
+github: @libuv
+
+strip:    true
+arch:     x64
+source:   %libuv
+include:  %libuv/include
+include:  %libuv/src
+
+optimize: 2
+
+compiler: clang
+
+libuv: [
+	files: [
+		%src/strtok.c
+		%src/strscpy.c
+		%src/random.c
+		%src/thread-common.c
+		%src/timer.c
+		%src/threadpool.c
+		%src/uv-data-getter-setters.c
+		%src/version.c
+		%src/uv-common.c
+		%src/fs-poll.c
+		%src/idna.c
+		%src/inet.c
+	]
+	#if windows? [
+		files: [
+		;@@TODO..
+		]
+	]
+	#if macos? [
+		files: [
+			%src/unix/getaddrinfo.c
+			%src/unix/loop-watcher.c
+			%src/unix/core.c
+			%src/unix/getnameinfo.c
+			%src/unix/fs.c
+			%src/unix/process.c
+			%src/unix/loop.c
+			%src/unix/poll.c
+			%src/unix/pipe.c
+			%src/unix/random-devurandom.c
+			%src/unix/tcp.c
+			%src/unix/signal.c
+			%src/unix/tty.c
+			%src/unix/thread.c
+			%src/unix/stream.c
+			%src/unix/proctitle.c
+			%src/unix/bsd-ifaddrs.c
+			%src/unix/random-getentropy.c
+			%src/unix/udp.c
+			%src/unix/kqueue.c
+			%src/unix/darwin-proctitle.c
+			%src/unix/darwin.c
+			%src/unix/fsevents.c
+			%src/unix/async.c
+		]
+	]
+]
+
+test-source: [
+	source:  %test
+	library: %uv
+] 
+
+eggs: [
+	"Static uv library" [
+		:libuv
+		name:  %libuv
+		flag:  archive-only
+		strip:  false
+	]
+	"Test: hello" [
+		:test-source
+		name:    %hello
+		file:    %hello.c
+	]
+	"Test: read-file" [
+		:test-source
+		name:    %read-file
+		file:    %read-file.c
+	]
+	"Test: mkdir" [
+		:test-source
+		name:    %mkdir
+		file:    %mkdir.c
+	]
+	"Test: detach" [
+		:test-source
+		name:    %detach
+		file:    %detach.c
+	]
+	"Test: uvcat" [
+		:test-source
+		name:    %uvcat
+		file:    %uvcat.c
+	]
+	"Test: tty" [
+		:test-source
+		name:    %tty
+		file:    %tty.c
+	]
+]
